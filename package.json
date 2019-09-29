@@ -1,0 +1,25 @@
+{
+  "name": "weather-forecasr-pwa-app",
+  "version": "1.0.0",
+  "description": "weather forrcast pwa app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkrstvm/PWAApps.git"
+  },
+  "author": "muralee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mkrstvm/PWAApps/issues"
+  },
+  "homepage": "https://github.com/mkrstvm/PWAApps#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-http-to-https": "^1.1.4",
+    "node-fetch": "^2.6.0"
+  }
+}
