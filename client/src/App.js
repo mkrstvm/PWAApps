@@ -127,14 +127,34 @@ class App extends Component {
       });
   }
 
+  getForecastFromCache(coords) {
+    if (!("caches" in window)) {
+      return null;
+    }
+    const url = `${window.location.origin}/forecast/${coords}`;
+    return caches
+      .match(url)
+      .then(response => {
+        if (response) {
+          return response.json();
+        }
+        return null;
+      })
+      .catch(err => {
+        console.error("Error getting data from cache", err);
+        return null;
+      });
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
+        <header>
           <h1>
             {" "}
-            Weather PWA
+            Weather PWA{" "}
             <a href="https://darksky.net/poweredby/" class="powered-by">
+              {" "}
               Powered by Dark Sky
             </a>
           </h1>
@@ -265,6 +285,9 @@ class App extends Component {
     Object.keys(this.loadLocationList()).forEach(key => {
       const location = this.loadLocationList()[key];
       const card = this.getForecastTemplate(location);
+      this.getForecastFromCache(location.geo).then(forecast => {
+        this.renderForecast(card, forecast);
+      });
       this.getForecastFromNetwork(location.geo).then(forecast =>
         this.renderForecast(card, forecast)
       );

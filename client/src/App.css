@@ -14,7 +14,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: red;
 }
 
 .App-link {
@@ -121,9 +121,9 @@ body {
   background: url(/images/install.svg) center center no-repeat;
 }
 
-.header .powered-by {
-  color: white;
-  font-size: 0.6em;
+.powered-by {
+  color: red;
+  font-size: 20px;
   text-decoration: none;
 }
 
