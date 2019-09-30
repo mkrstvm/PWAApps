@@ -118,13 +118,13 @@ class App extends Component {
   }
 
   getForecastFromNetwork(coords) {
-    return fetch(`/forecast/${coords}`).then(
-      (response => {
+    return fetch(`forecast/${coords}`)
+      .then(response => {
         return response.json();
-      }).catch(() => {
-        return null;
       })
-    );
+      .catch(() => {
+        return null;
+      });
   }
 
   render() {
@@ -262,10 +262,10 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const locations = this.loadLocationList();
-    locations.forEach(key => {
-      const card = this.getForecastTemplate(key);
-      this.getForecastFromNetwork(key.geo).then(forecast =>
+    Object.keys(this.loadLocationList()).forEach(key => {
+      const location = this.loadLocationList()[key];
+      const card = this.getForecastTemplate(location);
+      this.getForecastFromNetwork(location.geo).then(forecast =>
         this.renderForecast(card, forecast)
       );
     });

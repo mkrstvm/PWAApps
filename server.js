@@ -120,7 +120,7 @@ function getForecast(req, resp) {
     })
     .catch(err => {
       console.error("Dark Sky API Error:", err.message);
-      resp.json(generateFakeForecast(location));
+      resp.json(getFakeForecast(location));
     });
 }
 
