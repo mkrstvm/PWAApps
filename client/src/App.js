@@ -3,7 +3,44 @@ import { DateTime } from "luxon";
 
 import "./App.css";
 
+const weatherApp = {
+  selectedLocations: {},
+  addDialogContainer: document.getElementById("addDialogContainer")
+};
+
 class App extends Component {
+  toggleAddDialog() {
+    weatherApp.addDialogContainer.classList.toggle("visible");
+  }
+
+  addLocation() {
+    // Hide the dialog
+    this.toggleAddDialog();
+    // Get the selected city
+    const select = document.getElementById("selectCityToAdd");
+    const selected = select.options[select.selectedIndex];
+    const geo = selected.value;
+    const label = selected.textContent;
+    const location = { label: label, geo: geo };
+    // Create a new card & get the weather data from the server
+    const card = this.getForecastTemplate(location);
+    this.getForecastFromNetwork(geo).then(forecast => {
+      this.renderForecast(card, forecast);
+    });
+    // Save the updated list of selected cities.
+    weatherApp.selectedLocations[geo] = location;
+    this.saveLocationList(weatherApp.selectedLocations);
+  }
+
+  removeLocation(evt) {
+    const parent = evt.srcElement.parentElement;
+    parent.remove();
+    if (weatherApp.selectedLocations[parent.id]) {
+      delete weatherApp.selectedLocations[parent.id];
+      this.saveLocationList(weatherApp.selectedLocations);
+    }
+  }
+
   renderForecast(card, data) {
     if (!data) {
       // There's no data, skip the update.
@@ -109,9 +146,9 @@ class App extends Component {
     const newCard = document.getElementById("weather-template").cloneNode(true);
     newCard.querySelector(".location").textContent = location.label;
     newCard.setAttribute("id", id);
-    // newCard
-    //   .querySelector(".remove-city")
-    //   .addEventListener("click", removeLocation);
+    newCard
+      .querySelector(".remove-city")
+      .addEventListener("click", this.removeLocation.bind(this));
     document.querySelector("main").appendChild(newCard);
     newCard.removeAttribute("hidden");
     return newCard;
@@ -162,6 +199,15 @@ class App extends Component {
         </header>
 
         <main class="main">
+          <button
+            onClick={this.toggleAddDialog.bind(this)}
+            id="butAdd"
+            class="fab"
+            aria-label="Add"
+          >
+            <span class="icon add"></span>
+          </button>
+
           <div id="weather-template" class="weather-card" hidden>
             <div class="card-spinner">
               <svg viewBox="0 0 32 32" width="32" height="32">
@@ -278,13 +324,59 @@ class App extends Component {
             </div>
           </div>
         </main>
+
+        <div id="addDialogContainer">
+          <div class="dialog">
+            <div class="dialog-title">Add new city</div>
+            <div class="dialog-body">
+              <select id="selectCityToAdd" aria-label="City to add">
+                <option value="28.6472799,76.8130727">Dehli, India</option>
+                <option value="-5.7759362,106.1174957">
+                  Jakarta, Indonesia
+                </option>
+                <option value="51.5287718,-0.2416815">London, UK</option>
+                <option value="40.6976701,-74.2598666">New York, USA</option>
+                <option value="48.8589507,2.2770202">Paris, France</option>
+                <option value="-64.8251018,-63.496847">
+                  Port Lockroy, Antarctica
+                </option>
+                <option value="37.757815,-122.5076401">
+                  San Francisco, USA
+                </option>
+                <option value="31.2243085,120.9162955">Shanghai, China</option>
+                <option value="35.6735408,139.5703032">Tokyo, Japan</option>
+              </select>
+            </div>
+            <div class="dialog-buttons">
+              <button
+                onClick={this.toggleAddDialog.bind(this)}
+                id="butDialogCancel"
+                class="button"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={this.addLocation.bind(this)}
+                id="butDialogAdd"
+                class="button"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
+
         <script src="../public/install.js"></script>
       </div>
     );
   }
 
   componentDidMount() {
-    Object.keys(this.loadLocationList()).forEach(key => {
+    weatherApp.addDialogContainer = document.getElementById(
+      "addDialogContainer"
+    );
+    weatherApp.selectedLocations = this.loadLocationList();
+    Object.keys(weatherApp.selectedLocations).forEach(key => {
       const location = this.loadLocationList()[key];
       const card = this.getForecastTemplate(location);
       this.getForecastFromCache(location.geo).then(forecast => {
