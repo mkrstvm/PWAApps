@@ -158,6 +158,7 @@ class App extends Component {
               Powered by Dark Sky
             </a>
           </h1>
+          <button id="butInstall" aria-label="Install"></button>
         </header>
 
         <main class="main">
@@ -277,6 +278,7 @@ class App extends Component {
             </div>
           </div>
         </main>
+        <script src="../public/install.js"></script>
       </div>
     );
   }
