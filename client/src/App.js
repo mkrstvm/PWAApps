@@ -118,7 +118,7 @@ class App extends Component {
   }
 
   loadLocationList() {
-    let locations = localStorage.getItem("locationList");
+    let locations = localStorage.getItem("locationlist");
     if (locations) {
       try {
         locations = JSON.parse(locations);
