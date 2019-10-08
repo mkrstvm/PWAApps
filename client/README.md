@@ -16,6 +16,7 @@ This project uses React in front end and nOde.js express server in back end.
 
 Pending Items:
 
-1. Install button in UI not showing properly.
+1. Install/Unistall button in UI not showing properly.
 2. offline cashe testing.
-3. Unit testing
+3. Service worker fetch event
+4. Unit testing
