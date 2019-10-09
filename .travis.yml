@@ -4,3 +4,16 @@ services:
 
 before_install:
   - docker build -t pwimage -f Dockerfile .
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-west-2"
+  app: "pwadocker"
+  env: "Pwadocker-env"
+  bucket_name: "elasticbeanstalk-us-west-2-766972084568"
+  bucket_path: "pwadocker"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secure_access_key:
+    secure: "$AWS_SECRET_KEY"
